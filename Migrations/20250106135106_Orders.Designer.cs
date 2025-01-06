@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Poiect_cafea.Data;
 
@@ -11,9 +12,11 @@ using Poiect_cafea.Data;
 namespace Poiect_cafea.Migrations
 {
     [DbContext(typeof(Poiect_cafeaContext))]
-    partial class Poiect_cafeaContextModelSnapshot : ModelSnapshot
+    [Migration("20250106135106_Orders")]
+    partial class Orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

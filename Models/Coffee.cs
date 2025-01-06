@@ -24,5 +24,7 @@ namespace Poiect_cafea.Models
 
         public ICollection<CoffeeBlend>? CoffeeBlends { get; set; }
 
+        public ICollection<Order>? Orders { get; set; }
+
     }
 }

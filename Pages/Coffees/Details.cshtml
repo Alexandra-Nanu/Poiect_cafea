@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.Coffee.Origin)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Coffee.Origin)
+            @Html.DisplayFor(model => model.Coffee.Origin.OriginName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Coffee.Price)
@@ -34,6 +34,21 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Coffee.ExpirationDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Coffee.Producer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Coffee.Producer.ProducerName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Coffee.CoffeeBlends)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var blend in Model.Coffee.CoffeeBlends)
+            {
+                @blend.Blend.ID @: @blend.Blend.BlendName
+            }
         </dd>
     </dl>
 </div>

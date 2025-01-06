@@ -11,7 +11,7 @@ using Poiect_cafea.Models;
 
 namespace Poiect_cafea.Pages.Coffees
 {
-    public class EditModel : PageModel
+    public class EditModel : CoffeeBlendsPageModel
     {
         private readonly Poiect_cafea.Data.Poiect_cafeaContext _context;
 
@@ -29,51 +29,94 @@ namespace Poiect_cafea.Pages.Coffees
             {
                 return NotFound();
             }
+            Coffee = await _context.Coffee
+                .Include(c => c.Producer)
+                .Include(c => c.Origin)
+                .Include(c => c.CoffeeBlends)
+                    .ThenInclude(c => c.Blend)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
 
-            var coffee =  await _context.Coffee.FirstOrDefaultAsync(m => m.ID == id);
-            if (coffee == null)
+            //var coffee =  await _context.Coffee.FirstOrDefaultAsync(m => m.ID == id);
+            if (Coffee == null)
             {
                 return NotFound();
             }
-            Coffee = coffee;
-            ViewData["ProducerID"] = new SelectList(_context.Set<Producer>(), "ID", "ProducerName");
-            ViewData["OriginID"] = new SelectList(_context.Set<Origin>(), "ID", "OriginName");
+            PopulateAssignedBlendData(_context, Coffee);
+
+            // Coffee = coffee;
+            //ViewData["OriginID"] = new SelectList(_context.Set<Origin>(), "ID", "OriginName");
+           // ViewData["ProducerID"] = new SelectList(_context.Set<Producer>(), "ID", "ProducerName");
+           ViewData["OriginID"] = new SelectList(_context.Origin, "ID", "OriginName");
+           ViewData["ProducerID"] = new SelectList(_context.Producer, "ID", "ProducerName");
+
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedBlends)
         {
-            if (!ModelState.IsValid)
+            /* if (!ModelState.IsValid)
+             {
+                 return Page();
+             }
+
+             _context.Attach(Coffee).State = EntityState.Modified;
+
+             try
+             {
+                 await _context.SaveChangesAsync();
+             }
+             catch (DbUpdateConcurrencyException)
+             {
+                 if (!CoffeeExists(Coffee.ID))
+                 {
+                     return NotFound();
+                 }
+                 else
+                 {
+                     throw;
+                 }
+             }
+
+             return RedirectToPage("./Index");*/
+            if (id == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Coffee).State = EntityState.Modified;
-
-            try
+            var coffeeToUpdate = await _context.Coffee
+                .Include(i => i.Producer)
+                .Include(i => i.Origin)
+                .Include(i => i.CoffeeBlends)
+                    .ThenInclude(i => i.Blend)
+                .FirstOrDefaultAsync(s => s.ID == id);
+            if (coffeeToUpdate == null)
             {
+                return NotFound();
+            }
+
+            if (await TryUpdateModelAsync<Coffee>(
+                coffeeToUpdate,
+                "Coffee",
+                i => i.Name, i => i.OriginID,
+                i => i.Price, i => i.ExpirationDate, i => i.ProducerID))
+            {
+                UpdateCoffeeBlends(_context, selectedBlends, coffeeToUpdate);
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CoffeeExists(Coffee.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool CoffeeExists(int id)
-        {
-            return _context.Coffee.Any(e => e.ID == id);
+            UpdateCoffeeBlends(_context, selectedBlends, coffeeToUpdate);
+            PopulateAssignedBlendData(_context, coffeeToUpdate);
+            return Page();
         }
     }
 }
+
+      /*  private bool CoffeeExists(int id)
+        {
+            return _context.Coffee.Any(e => e.ID == id);
+        }*/
+

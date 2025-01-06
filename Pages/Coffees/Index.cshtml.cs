@@ -19,14 +19,33 @@ namespace Poiect_cafea.Pages.Coffees
             _context = context;
         }
 
-        public IList<Coffee> Coffee { get;set; } = default!;
+        public IList<Coffee> Coffee { get; set; } = default!;
+        public CoffeeData CoffeeD { get; set; }
+        public int CoffeeID { get; set; }
+        public int BlendID { get; set; }
 
-        public async Task OnGetAsync()
+
+        public async Task OnGetAsync(int? id, int? blendID)
         {
-            Coffee = await _context.Coffee
-                .Include(c => c.Origin)
-                .Include(c=>c.Producer)
-                .ToListAsync();
+            CoffeeD = new CoffeeData();
+
+            CoffeeD.Coffees = await _context.Coffee
+                  .Include(c => c.Producer)
+                  .Include(c => c.Origin)
+                  .Include(c => c.CoffeeBlends)
+                    .ThenInclude(c => c.Blend)
+                  .AsNoTracking()
+                  .OrderBy(c => c.Name)
+                  .ToListAsync();
+
+            if (id != null)
+            {
+                CoffeeID = id.Value;
+                Coffee coffee = CoffeeD.Coffees
+                    .Where(i => i.ID == id.Value).Single();
+                CoffeeD.Blends = coffee.CoffeeBlends.Select(s => s.Blend);
+            }
+
         }
     }
 }

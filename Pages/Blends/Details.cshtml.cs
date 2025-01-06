@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Poiect_cafea.Data;
 using Poiect_cafea.Models;
 
-namespace Poiect_cafea.Pages.Coffees
+namespace Poiect_cafea.Pages.Blends
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace Poiect_cafea.Pages.Coffees
             _context = context;
         }
 
-        public Coffee Coffee { get; set; } = default!;
+        public Blend Blend { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,23 +27,16 @@ namespace Poiect_cafea.Pages.Coffees
             {
                 return NotFound();
             }
-            Coffee = await _context.Coffee
-                .Include(c => c.Origin)
-                .Include(c => c.Producer)
-                .Include(c => c.CoffeeBlends)
-                    .ThenInclude(cb => cb.Blend)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.ID == id);
 
-            //var coffee = await _context.Coffee.FirstOrDefaultAsync(m => m.ID == id);
-            if (Coffee == null)
+            var blend = await _context.Blend.FirstOrDefaultAsync(m => m.ID == id);
+            if (blend == null)
             {
                 return NotFound();
             }
-           /* else
+            else
             {
-                Coffee = coffee;
-            }*/
+                Blend = blend;
+            }
             return Page();
         }
     }

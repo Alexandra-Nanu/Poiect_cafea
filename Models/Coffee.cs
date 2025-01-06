@@ -22,5 +22,7 @@ namespace Poiect_cafea.Models
         public int? ProducerID { get; set; }
         public Producer? Producer { get; set; }
 
+        public ICollection<CoffeeBlend>? CoffeeBlends { get; set; }
+
     }
 }

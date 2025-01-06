@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/"
 @model Poiect_cafea.Pages.Coffees.IndexModel
 
 @{
@@ -28,12 +28,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.Coffee[0].Producer.ProducerName)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coffee[0].CoffeeBlends)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Coffee) {
-        <tr>
+@foreach (var item in Model.CoffeeD.Coffees) {
+     string selectedRow = ""; 
+            if (item.ID == Model.CoffeeID) 
+            { 
+                selectedRow = "table-success"; 
+            } 
+ 
+        <tr class="@selectedRow">
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -49,6 +58,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Producer.ProducerName)
             </td>
+                <td>
+                    @{
+                        foreach (var blend in item.CoffeeBlends)
+                        {
+                            @blend.Blend.ID @:  @blend.Blend.BlendName <br />
+                        }
+                    }
+                </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |

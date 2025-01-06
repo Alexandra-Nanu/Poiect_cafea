@@ -17,5 +17,6 @@ namespace Poiect_cafea.Data
         public DbSet<Poiect_cafea.Models.Coffee> Coffee { get; set; } = default!;
         public DbSet<Poiect_cafea.Models.Producer> Producer { get; set; } = default!;
         public DbSet<Poiect_cafea.Models.Origin> Origin { get; set; } = default!;
+        public DbSet<Poiect_cafea.Models.Blend> Blend { get; set; } = default!;
     }
 }

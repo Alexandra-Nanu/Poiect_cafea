@@ -56,7 +56,7 @@ namespace Poiect_cafea.Pages.Coffees
             {
                 Coffee = coffee;
                 _context.Coffee.Remove(Coffee);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); //merge
             }
 
             return RedirectToPage("./Index");

@@ -23,11 +23,22 @@ namespace Poiect_cafea.Pages.Coffees
         public CoffeeData CoffeeD { get; set; }
         public int CoffeeID { get; set; }
         public int BlendID { get; set; }
+        public string NameSort { get; set; }
+        public string OriginSort { get; set; }
+        public string ProducerSort { get; set; }
+        public string CurrentFilter { get; set; }
 
 
-        public async Task OnGetAsync(int? id, int? blendID)
+        public async Task OnGetAsync(int? id, int? blendID, string sortOrder, string searchString)
         {
             CoffeeD = new CoffeeData();
+
+            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            OriginSort = sortOrder == "origin" ? "origin_desc" : "origin";
+            ProducerSort = sortOrder == "producer" ? "producer_desc" : "producer";
+
+            CurrentFilter = searchString;
+
 
             CoffeeD.Coffees = await _context.Coffee
                   .Include(c => c.Producer)
@@ -38,6 +49,13 @@ namespace Poiect_cafea.Pages.Coffees
                   .OrderBy(c => c.Name)
                   .ToListAsync();
 
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                CoffeeD.Coffees = CoffeeD.Coffees.Where(s => s.Origin.OriginName.Contains(searchString)
+                                                         || s.Producer.ProducerName.Contains(searchString)
+                                                         || s.Name.Contains(searchString));
+            }                               
+            
             if (id != null)
             {
                 CoffeeID = id.Value;
@@ -46,6 +64,28 @@ namespace Poiect_cafea.Pages.Coffees
                 CoffeeD.Blends = coffee.CoffeeBlends.Select(s => s.Blend);
             }
 
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    CoffeeD.Coffees = CoffeeD.Coffees.OrderByDescending(s => s.Name);
+                    break;
+                case "origin_desc":
+                    CoffeeD.Coffees = CoffeeD.Coffees.OrderByDescending(s => s.Origin.OriginName);
+                    break;
+                case "producer_desc":
+                    CoffeeD.Coffees = CoffeeD.Coffees.OrderByDescending(s => s.Producer.ProducerName);
+                    break;
+                case "origin":
+                    CoffeeD.Coffees = CoffeeD.Coffees.OrderBy(s => s.Origin.OriginName);
+                    break;
+                case "producer":
+                    CoffeeD.Coffees = CoffeeD.Coffees.OrderBy(s => s.Producer.ProducerName);
+                    break;
+                default:
+                    CoffeeD.Coffees = CoffeeD.Coffees.OrderBy(s => s.Name);
+                    break;
+
+            }
         }
     }
 }

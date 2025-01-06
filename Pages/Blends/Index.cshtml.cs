@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Poiect_cafea.Data;
 using Poiect_cafea.Models;
+using Poiect_cafea.Models.ViewModels;
 
 namespace Poiect_cafea.Pages.Blends
 {
@@ -20,10 +21,30 @@ namespace Poiect_cafea.Pages.Blends
         }
 
         public IList<Blend> Blend { get;set; } = default!;
+        public BlendIndexData BlendData { get; set; }
+        public int BlendID { get; set; }
+        public int CoffeeID { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? id, int? coffeeID)
         {
-            Blend = await _context.Blend.ToListAsync();
+            BlendData = new BlendIndexData();
+            BlendData.Blends = await _context.Blend
+                .Include(b => b.CoffeeBlends)
+                    .ThenInclude(cb => cb.Coffee)
+                        .ThenInclude(c => c.Origin)
+                .OrderBy(B => B.BlendName)
+                .ToListAsync();
+
+            if (id != null)
+            {
+                BlendID = id.Value;
+                Blend blend = BlendData.Blends
+                    .Where(i => i.ID == id.Value).Single();
+                BlendData.Coffees = blend.CoffeeBlends
+                    .Select(cb => cb.Coffee)
+                    .ToList();
+            }
         }
     }
-}
+}  
+

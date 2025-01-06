@@ -10,14 +10,30 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Coffee Name / Origin / Producer:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Back to full List</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Coffee[0].Name)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"> 
+                    @Html.DisplayNameFor(model => model.Coffee[0].Name)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Coffee[0].Origin)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.OriginSort">
+                    @Html.DisplayNameFor(model => model.Coffee[0].Origin)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Coffee[0].Price)
@@ -26,7 +42,9 @@
                 @Html.DisplayNameFor(model => model.Coffee[0].ExpirationDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Coffee[0].Producer.ProducerName)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.ProducerSort"> 
+                    @Html.DisplayNameFor(model => model.Coffee[0].Producer.ProducerName)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Coffee[0].CoffeeBlends)

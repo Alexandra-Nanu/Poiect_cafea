@@ -28,7 +28,13 @@ namespace Poiect_cafea.Pages.Orders
                 return NotFound();
             }
 
-            var order = await _context.Order.FirstOrDefaultAsync(m => m.ID == id);
+            //var order = await _context.Order.FirstOrDefaultAsync(m => m.ID == id);
+            var order = await _context.Order
+                .Include(c => c.Client)
+                .Include(c => c.Coffee)
+                    .ThenInclude(coffee => coffee.Producer)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (order == null)
             {
                 return NotFound();

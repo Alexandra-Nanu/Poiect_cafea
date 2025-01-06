@@ -36,8 +36,18 @@ namespace Poiect_cafea.Pages.Orders
                 return NotFound();
             }
             Order = order;
-           ViewData["ClientID"] = new SelectList(_context.Client, "ID", "ID");
-           ViewData["CoffeeID"] = new SelectList(_context.Coffee, "ID", "ID");
+
+            var coffees = _context.Coffee
+                .Select(c => new
+                {
+                    ID = c.ID,
+                    DisplayText = $"{c.Name} by {c.Producer.ProducerName}"
+                })
+                .ToList();
+
+            ViewData["CoffeeID"] = new SelectList(coffees, "ID", "DisplayText");
+            ViewData["ClientID"] = new SelectList(_context.Client, "ID", "FullName");
+            
             return Page();
         }
 

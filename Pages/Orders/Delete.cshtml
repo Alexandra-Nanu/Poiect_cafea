@@ -16,13 +16,13 @@
             @Html.DisplayNameFor(model => model.Order.Client)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Order.Client.ID)
+            @Html.DisplayFor(model => model.Order.Client.FullName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Order.Coffee)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Order.Coffee.ID)
+            @Model.Order.Coffee.Name by @Model.Order.Coffee.Producer.ProducerName
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Order.ShippingDate)

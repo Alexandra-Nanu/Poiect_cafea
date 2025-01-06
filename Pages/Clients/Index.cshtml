@@ -3,13 +3,15 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
 <h1>Index</h1>
 
-<p>
+<!--<p>
     <a asp-page="Create">Create New</a>
 </p>
+-->
 <table class="table">
     <thead>
         <tr>
@@ -51,8 +53,7 @@
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> 
             </td>
         </tr>
 }

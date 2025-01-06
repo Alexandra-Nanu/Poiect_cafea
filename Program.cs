@@ -16,6 +16,9 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AllowAnonymousToPage("/Coffees/Index");
     options.Conventions.AllowAnonymousToPage("/Coffees/Details");
     options.Conventions.AuthorizeFolder("/Clients", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/Producers", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/Blends", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/Origins", "AdminPolicy");
 });
 builder.Services.AddDbContext<Poiect_cafeaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Poiect_cafeaContext") ?? throw new InvalidOperationException("Connection string 'Poiect_cafeaContext' not found.")));

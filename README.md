@@ -9,9 +9,9 @@ This ASP.NET Core MVC project is designed for managing coffee warehouse operatio
   - Products & Inventory: Cafea, TipCafea, Stoc
   - Orders & Transactions: Comanda, Client, Plata
 - **Data Management**
- - Built using Entity Framework Core for handling CRUD operations
- - Defines relationships between coffee items, orders, customers, and payments
- -  Implements a Code-First approach with clearly defined models and a DbContext
+  - Built using Entity Framework Core for handling CRUD operations
+  - Defines relationships between coffee items, orders, customers, and payments
+  -  Implements a Code-First approach with clearly defined models and a DbContext
 
 ### User Authentication & Access Control
 - Login System with credential-based authentication

@@ -1,0 +1,95 @@
+﻿@page "/"
+@model Poiect_cafea.Pages.Coffees.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Coffee Name / Origin / Producer:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Back to full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"> 
+                    @Html.DisplayNameFor(model => model.Coffee[0].Name)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.OriginSort">
+                    @Html.DisplayNameFor(model => model.Coffee[0].Origin)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coffee[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coffee[0].ExpirationDate)
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.ProducerSort"> 
+                    @Html.DisplayNameFor(model => model.Coffee[0].Producer.ProducerName)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coffee[0].CoffeeBlends)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CoffeeD.Coffees) {
+     string selectedRow = ""; 
+            if (item.ID == Model.CoffeeID) 
+            { 
+                selectedRow = "table-success"; 
+            } 
+ 
+        <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Origin.OriginName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpirationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producer.ProducerName)
+            </td>
+                <td>
+                    @{
+                        foreach (var blend in item.CoffeeBlends)
+                        {
+                            @blend.Blend.ID @:  @blend.Blend.BlendName <br />
+                        }
+                    }
+                </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
